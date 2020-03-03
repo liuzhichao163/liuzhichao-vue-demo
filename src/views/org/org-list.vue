@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+    <el-col :span="14" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
           <el-input v-model="filters.orgName" placeholder="部门名称"></el-input>
@@ -18,19 +18,14 @@
       </el-table>
     </div>
     <div>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="total"
-        :page-size="filters.pageSize"
-        @current-change="pageChange">
-      </el-pagination>
+       <pageNation :total="total" @pageChange="pageChange"></pageNation>
     </div>
   </div>
 </template>
 
 <script>
 import OrgApi from '../../api/org'
+import pageNation from '../../components/module/pageNation.vue'
 export default {
   data () {
     return {
@@ -45,6 +40,11 @@ export default {
     }
   },
 
+  components:{
+        pageNation
+    },
+
+
   methods: {
     // 分页查询部门信息
     async loadData (flag) {
@@ -56,9 +56,12 @@ export default {
     async getOrgs () {
       this.loadData()
     },
-    pageChange (page) {
-      this.filters.pageIndex = page
-      this.loadData()
+
+     //分页
+    pageChange (item) {
+      this.filters.pageIndex = item.page_index;
+      this.filters.pageSize = item.page_limit;
+      this.loadData() //改变页码，重新渲染页面
     },
 
     formatter (row, column) {
@@ -83,7 +86,4 @@ export default {
 </script>
 
 <style scoped>
-  .columnStyle{
-    align :'center'
-  }
 </style>

@@ -36,5 +36,17 @@ export default {
   login: async (user) => {
     let resp = await axios.post('/api/users/actions/login/', user)
     return resp.data
-  }
+  },
+
+   // 用户登录
+   login2: async (user) => {
+    let resp = await axios.post(`/login/?userName=${user.userName}&userPassword=${user.userPassword}`)
+    return resp.data
+  },
+
+   // 修改用户数据
+   updateRole: async (role) => {
+    let resp = await axios.put('/api/role/', role)
+    return resp.data
+  },
 }

@@ -1,7 +1,8 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="10"><div class="grid-content bg-purple">
+      <el-col :span="6">
+        <div class="grid-content bg-purple">
         <el-tree
           highlight-current
           :props="defaultProps"
@@ -32,10 +33,13 @@
            </span>
         </span>
         </el-tree>
-      </div></el-col>
-      <el-col :span="14"><div class="grid-content bg-purple">
-        <UserList :orgId="checkId"></UserList>
-      </div></el-col>
+      </div>
+     </el-col>
+      <el-col :span="16">
+        <div class="grid-content bg-purple">
+          <UserList :orgId="checkId"/>>
+        </div>
+      </el-col>
     </el-row>
     <OrgForm :visible.sync="visible"
              @success="loadTree"
@@ -136,5 +140,14 @@ export default {
 </script>
 
 <style>
-
+.tableTitle {
+    position: relative;
+    margin: 0 auto;
+    width: 600px;
+    height: 1px;
+    background-color: #d4d4d4;
+    text-align: center;
+    font-size: 16px;
+    color: rgba(101, 101, 101, 1);
+  }
 </style>

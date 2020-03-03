@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import UserIndex from '../views/user/index'
-import OrgList from '../views/org/org-list'
 import Manager from '../views/home/manager'
-import OrgTree from '../views/org/org-tree'
 import Login from '../views/home/login'
 import NotFound from '../views/home/404'
+import Chat from '../views/chat/Chat'
+import Center from '../views/user/user-center'
 
 Vue.use(Router)
 
@@ -36,9 +35,11 @@ const router = new Router({
       component: Manager,
       name: '员工管理',
       children: [
-        { path: '/user/index', component: UserIndex, name: '用户管理' },
-        { path: '/org/org-tree', component: OrgTree, name: '部门管理' },
-        { path: '/org/org-list', component: OrgList, name: '部门列表' }
+        // { path: '/user/index', component: UserIndex, name: '用户管理' },
+        // { path: '/org/org-tree', component: OrgTree, name: '部门管理' },
+        // { path: '/org/org-list', component: OrgList, name: '部门列表' },
+        { path: '/chat/Chat', component: Chat, name: '消息列表' },
+        { path: '/user/user-center', component: Center, name: '个人中心'}
       ]
     }
   ]

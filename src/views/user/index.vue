@@ -12,9 +12,26 @@
         <el-form-item>
           <el-button type="primary" @click="openAddDialog">新增</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-upload
+              accept="application/vnd.ms-excel"
+              action="/api/users/importEmp"
+              :before-upload="beforeFileUpload"
+              :on-success="fileUploadSuccess"
+              :on-error="fileUploadError"
+              :disabled="fileUploadBtnText=='正在导入'"
+            >
+            <el-button type="primary" :loading="fileUploadBtnText=='正在导入'">
+              {{fileUploadBtnText}}
+            </el-button>
+          </el-upload>
+        </el-form-item>
+         <el-form-item>
+              <el-button type="primary" @click="exportUsers">导出数据</el-button>
+           </el-form-item>
       </el-form>
     </el-col>
-    <el-table border :data="tableData">
+    <el-table border height="400" :data="tableData">
       <el-table-column label="姓名" prop="userName"></el-table-column>
       <el-table-column label="职位" prop="job"></el-table-column>
       <el-table-column label="部门名称" prop="orgName"></el-table-column>
@@ -30,13 +47,7 @@
       </el-table-column>
     </el-table>
     <div>
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="total"
-        :page-size="filters.pageSize"
-        @current-change="pageChange">
-      </el-pagination>
+       <pageNation :total="total" @pageChange="pageChange"></pageNation>
     </div>
     <UserForm :visible.sync="visible" @success="loadData" :title="title" :formData="formData"></UserForm>
   </div>
@@ -45,19 +56,24 @@
 <script>
 import UserForm from './user-form.vue'
 import UserApi from '../../api/user'
+import pageNation from '../../components/module/pageNation.vue'
 
 export default {
-  components: {UserForm},
+  components: {
+      UserForm,
+      pageNation,
+      },
   data () {
     return {
       visible: false,
       tableData: [],
       title: '',
       total: 0,
+      fileUploadBtnText: '导入数据',
       filters: {
         userName: '',
         pageIndex: 1,
-        pageSize: 10
+        pageSize: 5
       },
       formData: {
         userName: '',
@@ -77,6 +93,27 @@ export default {
     this.loadData()
   },
   methods: {
+    //excel上传成功后的钩子
+   fileUploadSuccess(response, file, fileList) {
+      if (response.state == 200) {
+          this.$message({type: response.state, message: response.message});
+        }
+        this.loadData();
+        this.fileUploadBtnText = '导入数据';
+   },
+    //文件上传失败后的钩子
+    fileUploadError(err, file, fileList) {
+        this.$message({type: 'error', message: "导入失败!"});
+        this.fileUploadBtnText = '导入数据';
+      },
+      //点击上传按钮后，上传文件前的钩子
+     beforeFileUpload(file) {
+        this.fileUploadBtnText = '正在导入';
+      },
+      //导出用户excel的钩子
+      exportUsers(){
+        window.open("/api/users/", "_parent");
+      },
     // 查询用户列表
     async loadData (flag) {
       let resp = await UserApi.queryUsers(this.filters)
@@ -88,8 +125,9 @@ export default {
     async getUsers () {
       this.loadData()
     },
-    pageChange (page) {
-      this.filters.pageIndex = page
+    pageChange (item) {
+      this.filters.pageIndex = item.page_index;
+	    this.filters.pageSize = item.page_limit;
       this.loadData()
     },
     // 删除用户
@@ -103,7 +141,7 @@ export default {
         if (resp.state === 200) {
           this.$message({
             message: resp.message,
-            ype: 'success'
+            type: 'success'
           })
         } else {
           this.$message({
@@ -129,3 +167,6 @@ export default {
   }
 }
 </script>
+<style>
+
+</style>

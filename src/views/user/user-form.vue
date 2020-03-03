@@ -9,11 +9,11 @@
         <el-form-item label="工号" prop="userId" v-if="title==='新增用户'">
           <el-input v-model="userForm.userId" ></el-input>
         </el-form-item>
-        <el-form-item  label="姓名" prop="userName" v-if="title==='新增用户'">
-          <el-input  v-model="userForm.userName" ></el-input>
+        <el-form-item  label="姓名" prop="name" v-if="title==='新增用户'">
+          <el-input  v-model="userForm.name" ></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="userPassword" v-if="title==='新增用户'">
-          <el-input type="password" v-model="userForm.userPassword"></el-input>
+        <el-form-item label="密码" prop="password" v-if="title==='新增用户'">
+          <el-input type="password" v-model="userForm.password"></el-input>
         </el-form-item>
         <el-form-item label="职位" prop="job">
           <el-input v-model="userForm.job"></el-input>
@@ -62,11 +62,11 @@ export default{
         this.userForm = this.formData
       }
       if (!val) {
-        // this.$emit('update:visible', false)
+        this.$emit('update:visible', false)
         this.userForm = {
           userId: null,
-          userName: null,
-          userPassword: null,
+          name: null,
+          password: null,
           job: null,
           orgId: null
         }
@@ -78,10 +78,10 @@ export default{
   data () {
     return {
       rules: {
-        userName: [
+        name: [
           {required: true, trigger: 'change', message: '请输入姓名!'}
         ],
-        userPassword: [
+        password: [
           {required: true, trigger: 'change', message: '请输入密码!'}
         ]
       },
@@ -92,8 +92,8 @@ export default{
       },
       userForm: {
         userId: null,
-        userName: null,
-        userPassword: null,
+        name: null,
+        password: null,
         job: null,
         orgId: null
       },
