@@ -15,7 +15,7 @@ export const initMenu = (router, store)=> {
                   //将路由信息存入vuex的router数组
                   store.commit('initMenu', fmtRoutes);
                   console.log("<<<fmtRoutes>>>:"+JSON.stringify(fmtRoutes));
-                  store.dispatch('connect');
+                  store.dispatch('connect');  //调用vuex的actions中的connect方法创建stomp对象
             }
         })
 
