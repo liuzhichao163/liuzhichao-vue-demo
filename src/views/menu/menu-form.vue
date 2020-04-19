@@ -116,15 +116,6 @@ export default {
          this.postRequest("/api/menu", this.menuForm).then(resp=>{
             if(resp.data.state == 200){
                 this.$emit('success',false);
-                this.$message({
-                  message: resp.data.message,
-                  type: 'success'
-                })
-            }else{
-               this.$message({
-                  message: resp.data.message,
-                  type: 'error'
-                })
             }
          })
        })

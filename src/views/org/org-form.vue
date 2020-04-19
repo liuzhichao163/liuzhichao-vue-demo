@@ -24,7 +24,6 @@
   </el-dialog>
 </template>
 <script>
-import OrgApi from '../../api/org'
 
 export default {
   props: {
@@ -106,23 +105,20 @@ export default {
         if (valid) {
           if (this.title === '新增部门') {
             this.orgForm.pId = this.editData.orgId
-            resp = await OrgApi.create(this.orgForm)
+            this.postRequest("/api/orgs", this.orgForm).then(resp=>{
+                if(resp.data.state == 200){
+                  this.$emit('success',false);
+                }
+             })
           } else {
-            resp = await OrgApi.update(this.orgForm)
+            this.putRequest("/api/orgs", this.orgForm).then(resp=>{
+              if(resp.data.state == 200){
+                  this.$emit('success',false);
+                }
+            })
           }
           this.visible = false
           this.$emit('success')
-          if (resp.state === 200) {
-            this.$message({
-              message: '成功！',
-              type: 'success'
-            })
-          } else {
-            this.$message({
-              message: '失败！',
-              type: 'error'
-            })
-          }
           this.loadTree()
         }
       })

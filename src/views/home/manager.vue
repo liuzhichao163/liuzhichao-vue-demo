@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import WsApi from '../../api/ws'
 
 export default {
   computed: {

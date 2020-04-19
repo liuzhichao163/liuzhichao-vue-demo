@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import UserApi from '../../api/user'
 
 export default {
   props: {
@@ -33,8 +32,10 @@ export default {
   methods: {
     // 根据部门编号查询用户信息
     async loadData (orgId) {
-      let resp = await UserApi.queryUserByOrgId(orgId)
-      this.tableData = resp.userAndOrg
+      this.getRequest("/api/users/orgId?orgId="+orgId).then(resp=>{
+                this.tableData = resp.data.userAndOrg
+          })
+     
     },
 
     formatter (row, column) {

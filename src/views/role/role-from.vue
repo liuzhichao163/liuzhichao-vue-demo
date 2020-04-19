@@ -65,8 +65,6 @@ export default{
            name: '',
            nameZH: ''
         }
-        // alert(JSON.stringify(this.$refs['roleForm']))
-        // this.$refs['roleForm'].resetFields()
       }
     }
   },
@@ -94,17 +92,6 @@ export default{
 
     back(resp){
          this.$emit('success', false)
-         if (resp.data.state === 200) {
-            this.$message({
-              message: resp.data.message,
-              type: 'success'
-            })
-          } else {
-            this.$message({
-              message: resp.data.message,
-              type: 'error'
-            })
-          }
     },
 
 

@@ -1,4 +1,4 @@
-import {Message} from 'element-ui'
+import {Message, Alert} from 'element-ui'
 import { getRequest } from '../api/api';
 
 export const initMenu = (router, store)=> {
@@ -7,6 +7,7 @@ export const initMenu = (router, store)=> {
               return;
         }
 
+        //否则是用户f5刷新或直接在地址栏输入的地址，则要加载菜单
         getRequest("/api/menu/uid").then(resp=>{
             if(resp && resp.status == 200){
                   var fmtRoutes = formatRoutes(resp.data);

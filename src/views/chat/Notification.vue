@@ -67,7 +67,6 @@
 <script>
 import SockJS from 'sockjs-client'
 import Stomp from 'webstomp-client'
-import wsApi from '../../api/ws'
 
 export default {
     data(){
@@ -94,31 +93,21 @@ export default {
         },
         //发送系统消息
         sendNFMsg(){
-            //先将消息入库
-           wsApi.addMsg({title:this.title,content:this.message}).then(data=>{
-               if(data.state == 200){
-                   this.$message({
-                       message:data.message,
-                       type: 'success'
-                   })
-               }else{
-                   this.$message({
-                       message:data.message,
-                       type: 'error'
-                   })
-               }
-           })
+        //先将消息入库
+             this.postRequest("/api/msg",{title:this.title,content:this.message})
+
            //关闭发送消息的弹窗
             this.dialogVisible = false;
             //推送“系统消息”
             this.$store.state.stomp.send('/app/ws/nf')
+            this.initMsgs();
         },
 
         //获取系统消息列表
         initMsgs(){
-            wsApi.queryMsgs({page:this.page,size:this.size}).then(data=>{
-                console.log("系统消息"+JSON.stringify(data))
-                this.sysmsgs = data;
+             this.getRequest("/api/msg?page="+this.page+"&size="+this.size).then(resp=>{
+                 console.log("系统消息"+JSON.stringify(resp.data))
+                this.sysmsgs = resp.data;
             })
         },
 
@@ -134,21 +123,10 @@ export default {
             this.updateMsgState();
         },
 
+        //修改消息的状态
         updateMsgState(){
-                wsApi.updateMsgState(this.mid).then(data=>{
-                    if(data.state == 200){
-                        this.$message({
-                            message: data.message,
-                            type: 'success'
-                        })
-                    }else{
-                        this.$message({
-                            message: data.message,
-                            type: 'error'
-                        })
-                    }
-                    this.initMsgs();
-                })
+            this.putRequest("/api/msg",this.mid)
+            this.initMsgs();
         },
 
         //分页

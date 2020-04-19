@@ -52,7 +52,6 @@
         //头像上传成功后
         fileUploadSuccess(res, file) {
             if(res.state == 200){
-              // alert(JSON.stringify(res))
               this.user.httpUserFace = res.data.httpUserFace;
               this.user.userFace = res.data.userFace;
               this.$store.commit('login',this.user);

@@ -74,21 +74,11 @@ export default {
       },
 
       save(){
-        this.postRequest("/api/role/menu",{
+        this.postRequestKV("/api/role/menu",{
                         mids:this.$refs.slectMenu.getChecks(),
                         rid:this.formData.id}).then(resp=>{
-                            //alert(JSON.stringify(resp))
             if(resp.data.state == 200){
-                this.$message({
-                    message: resp.data.message,
-                    type: 'success'
-                })
                 this.closeDialog();
-            }else{
-               this.$message({
-                    message: resp.data.message,
-                    type: 'error'
-                }) 
             }
         })
       }

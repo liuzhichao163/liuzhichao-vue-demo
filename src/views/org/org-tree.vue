@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import OrgApi from '../../api/org'
 import OrgForm from './org-form'
 import UserList from '../org/user-list'
 
@@ -88,12 +87,14 @@ export default {
     async loadNodes (node, resolve) {
       this.node = node
       if (node.level === 0) {
-        let resp = await OrgApi.queryOrgs('')
-        return resolve(resp)
+        this.getRequest("/api/orgs/actions/children?orgId="+'').then(resp=>{
+                return resolve(resp.data)
+        })
       }
       if (node.level > 0) {
-        let resp = await OrgApi.queryOrgs(node.data.orgId)
-        return resolve(resp)
+        this.getRequest("/api/orgs/actions/children?orgId="+node.data.orgId).then(resp=>{
+                return resolve(resp.data)
+        })
       }
     },
     // 新增组织信息
@@ -115,11 +116,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        await OrgApi.delete(data.orgId)
-        this.$message({
-          message: '删除成功!',
-          type: 'success'
-        })
+        this.deleteRequest("/api/orgs/"+data.orgId)
         this.loadTree()
       }).catch(() => {
       })

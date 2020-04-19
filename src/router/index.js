@@ -25,11 +25,11 @@ const router = new Router({
       component: NotFound,
       name: '404'
     },
-    {
-      path: '*',
-      hidden: true,
-      redirect: {path: '/404'}
-    },
+    // {
+    //   path: '*',
+    //   hidden: true,
+    //   redirect: {path: '/404'}
+    // },
     {
       path: '/manager',
       component: Manager,

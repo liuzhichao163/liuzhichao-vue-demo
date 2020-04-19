@@ -105,20 +105,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(async () => {
-                this.deleteRequest("api/role?id="+id).then(resp=>{
-                    if(resp.data.state == 200){
-                        this.load()
-                        this.$message({
-                            message:resp.data.message,
-                            type: 'success'
-                        })
-                    }else{
-                        this.$message({
-                            message: resp.data.message,
-                            type: 'error'
-                        })
-                    }
-                })
+                this.deleteRequest("api/role?id="+id)
                 })
             },
 

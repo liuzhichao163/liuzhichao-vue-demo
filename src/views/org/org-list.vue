@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import OrgApi from '../../api/org'
 import pageNation from '../../components/module/pageNation.vue'
 export default {
   data () {
@@ -48,11 +47,13 @@ export default {
   methods: {
     // 分页查询部门信息
     async loadData (flag) {
-      let resp = await OrgApi.queryOrgsByName(this.filters)
-      this.orgData = resp.orgList
-      this.total = resp.count
-      this.visible = flag
+       this.getRequest("/api/orgs?orgName="+this.filters.orgName+"&pageIndex="+this.filters.pageIndex+"&pageSize="+this.filters.pageSize).then(resp=>{
+                  this.orgData = resp.data.orgList
+                  this.total = resp.data.count
+                  this.visible = flag
+            })
     },
+    
     async getOrgs () {
       this.loadData()
     },

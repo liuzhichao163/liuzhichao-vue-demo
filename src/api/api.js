@@ -17,16 +17,18 @@ axios.interceptors.request.use(config => {
 })
 
 //添加响应拦截器
-axios.interceptors.response.use(data => {
+axios.interceptors.response.use(resp => {
   //对响应做哪些事情
-  if (data.status && data.status == 200 && data.data.status == 500) {
-    Message.error({message: data.data.msg});
-    return;
+  // if (resp.data.state && resp.data.state == 200 && resp.data.state == 500) {
+  //   Message.error({message: data.data.msg});
+  //   return;
+  // }
+  if (resp.data.state && resp.data.state == 200) {
+    Message.success({message: resp.data.message});
+  }else if(resp.data.state){
+    Message.error({message: resp.data.message});
   }
-  if (data.data.msg) {
-    Message.success({message: data.data.msg});
-  }
-  return data;
+  return resp;
 }, err => {
   //响应错误时做那些事
   if (err.response.status == 504 || err.response.status == 404) {
@@ -47,7 +49,7 @@ axios.interceptors.response.use(data => {
 
 let base = '';
 //post请求
-export const postRequest = (url, params) => {
+export const postRequestKV = (url, params) => {
   return axios({
     method: 'post',
     url: `${base}${url}`,
@@ -61,6 +63,18 @@ export const postRequest = (url, params) => {
     }],
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
+}
+//post请求
+export const postRequest = (url, params) => {
+  return axios({
+    method: 'post',
+    url: `${base}${url}`,
+    data: params,
+
+    headers: {
+      'Content-Type': 'application/json'
     }
   });
 }
@@ -83,12 +97,16 @@ export const putRequest2 = (url, params) => {
     }
   });
 }
-//get请求
+//put请求
 export const putRequest = (url, params) => {
   return axios({
     method: 'put',
     url: `${base}${url}`,
-    data: params
+    data: params,
+
+    headers: {
+      'Content-Type': 'application/json'
+    }
   });
 }
 

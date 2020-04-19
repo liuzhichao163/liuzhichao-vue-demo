@@ -4,10 +4,11 @@
         class="text-center"  
         @size-change="handleSizeChange" 
         @current-change="handleCurrentChange"
-        :current-page="page.page" 
+        :current-page="page.page_index" 
         :page-sizes="pageSizes" 
-        :page-size="page.limit"
-        layout="total, sizes, prev, pager, next, jumper" :total="total">
+        :page-size="page.page_limit"
+        layout="total, sizes, prev, pager, next, jumper" 
+        :total="total">
     </el-pagination>
    </div>
 </template>
@@ -18,7 +19,7 @@ export default {
              pageSizes: [1, 5, 10, 15],
               page: {
                 page_index: 1,
-                page_limit: 5
+                page_limit: 5,
             }
         }
     },

@@ -37,9 +37,6 @@
   </el-dialog>
 </template>
 <script>
-import UserApi from '../../api/user'
-import OrgApi from '../../api/org'
-
 export default{
   props: {
     visible: {
@@ -107,33 +104,29 @@ export default{
   },
   // 级联查询获得所有部门名称
   async mounted () {
-    let resp = await OrgApi.queryOrgsByName(this.filters)
-    this.orgData = resp.orgList
+    this.getRequest("/api/orgs?orgName="+this.filters.orgName+"&pageIndex="+this.filters.pageIndex+"&pageSize="+this.filters.pageSize).then(resp=>{
+        this.orgData = resp.data.orgList
+    })
+
   },
   methods: {
     save () {
       this.$refs['form'].validate(async (valid) => {
         let resp = null
+        let state = '';
         if (valid) {
           if (this.title === '新增用户') {
-            resp = await UserApi.create(this.userForm)
+            this.postRequest("/api/users",this.userForm).then(resp=>{
+              state = resp.data.state;
+            })
           } else {
             // 修改用户
-            resp = await UserApi.update(this.userForm)
+            this.putRequest("/api/users",this.userForm).then(resp=>{
+              state = resp.data.state;
+            })
             this.$refs['form'].resetFields()
           }
           this.$emit('success', false)
-          if (resp.state === 200) {
-            this.$message({
-              message: resp.message,
-              type: 'success'
-            })
-          } else {
-            this.$message({
-              message: resp.message,
-              type: 'error'
-            })
-          }
         }
       })
     },

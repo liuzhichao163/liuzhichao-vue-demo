@@ -55,7 +55,6 @@
 
 <script>
 import UserForm from './user-form.vue'
-import UserApi from '../../api/user'
 import pageNation from '../../components/module/pageNation.vue'
 
 export default {
@@ -112,14 +111,15 @@ export default {
       },
       //导出用户excel的钩子
       exportUsers(){
-        window.open("/api/users/", "_parent");
+        window.open("/api/users/exportEmp", "_parent");
       },
     // 查询用户列表
     async loadData (flag) {
-      let resp = await UserApi.queryUsers(this.filters)
-      this.tableData = resp.userAndOrg
-      this.total = resp.count
-      this.visible = flag
+      this.getRequest("api/users?userName="+this.filters.userName+"&pageIndex="+this.filters.pageIndex+"&pageSize="+this.filters.pageSize).then(resp=>{
+                this.tableData = resp.data.userAndOrg
+                this.total = resp.data.count
+                this.visible = flag
+          })
     },
     // 根据用户名模糊查询
     async getUsers () {
@@ -137,19 +137,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        let resp = await UserApi.delete(id)
-        if (resp.state === 200) {
-          this.$message({
-            message: resp.message,
-            type: 'success'
-          })
-        } else {
-          this.$message({
-            message: resp.message,
-            type: 'error'
-          })
-        }
-        this.loadData()
+         this.deleteRequest("/api/users/"+id)
+         this.loadData()
       }).catch(() => {
       })
     },

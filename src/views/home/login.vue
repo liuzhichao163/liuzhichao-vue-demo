@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import userApi from '../../api/user/index'
 import api from '../../api/api'
 export default {
   name: 'login',
@@ -53,13 +52,18 @@ export default {
           // 将提交的数据进行封装
           let user = {username: this.account.userName, password: this.account.userPassword}
           // 调用函数  传递参数 获取结果
-
           this.postRequest('login', user).then(resp=> {
+            this.logining = false
             if(resp.data.state == 200){
               this.$store.commit('login',resp.data.data);
               //如果当前登录是由路由守卫跳转过来的，则登陆成功后获取跳转路径所携带的参数(原目标路径)
               var path = this.$route.query.redirect;
               this.$router.replace({path: path == '/' || path == undefined ? '/manager' : path});
+            }else{
+              this.$message({
+                    message: "登录失败！",
+                    type: 'error'
+                  })
             }
           });
         } else {
